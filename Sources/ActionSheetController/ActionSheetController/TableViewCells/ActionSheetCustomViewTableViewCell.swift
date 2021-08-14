@@ -66,8 +66,7 @@ class ActionSheetCustomViewTableViewCell: UITableViewCell {
         
     func configureView(with type: ActionSheetCellType) {
         switch type {
-        case .custom(let view, let action):
-            self.onCellTappedAction = action
+        case .custom(let view):
             self.constrainCustom(view)
         default:
             break

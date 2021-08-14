@@ -99,7 +99,7 @@ class ActionSheetControllerContainerView: UIView {
         doneButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 8).isActive = true
         doneButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
         doneButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -8).isActive = true
-        doneButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        doneButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -5).isActive = true
         
         backDropView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         backDropView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true

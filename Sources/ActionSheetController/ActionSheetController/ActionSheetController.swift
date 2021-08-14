@@ -7,14 +7,17 @@
 
 import UIKit
 
-typealias Size = (height: CGFloat, width: CGFloat)
+public struct Size {
+    let height: CGFloat
+    let width: CGFloat
+}
 
-class ActionSheetController: UIView {
+public class ActionSheetController: UIView {
     var tableViewCellArray: [ActionSheetCellType] = []
     var tableViewHeaderArray: [ActionSheetCellType] = []
     let contentView = ActionSheetControllerContainerView()
     
-    init(title: String?, message: String?) {
+    public init(title: String?, message: String?) {
         super.init(frame: .zero)
         setupView()
         setupTableView()
@@ -52,7 +55,7 @@ extension ActionSheetController {
 }
 
 extension ActionSheetController {
-    func launch() {
+    public func launch() {
         guard let appView = UIApplication.shared.windows.last?.rootViewController?.view else {return}
         appView.addSubview(self)
         self.topAnchor.constraint(equalTo: appView.topAnchor).isActive = true
@@ -62,7 +65,7 @@ extension ActionSheetController {
         shouldEnableScrolling()
     }
     
-    func removeActionSheetFromSuperView() {
+    public func removeActionSheetFromSuperView() {
         self.removeFromSuperview()
     }
     
@@ -85,27 +88,27 @@ extension ActionSheetController {
 }
 
 extension ActionSheetController: ActionSheetActions {
-    func addHeader(image: UIImage?, size: Size? = nil, cornerRadius: CGFloat? = nil, title: String?, message: String?) {
+    public func addHeader(image: UIImage?, size: Size? = nil, cornerRadius: CGFloat? = nil, title: String?, message: String?) {
         tableViewHeaderArray.insert(.headerImage(image: image, size: size, cornerRadius: cornerRadius, title: title, message: message), at: 0)
         self.contentView.tableView.reloadData()
     }
     
-    func addHeader(view: UIView) {
+    public func addHeader(view: UIView) {
         tableViewHeaderArray.insert(.headerView(view: view), at: 0)
         self.contentView.tableView.reloadData()
     }
     
-    func addAction(title: String, type: ActionSheetActionType, action: (() -> ())?) {
+    public func addAction(title: String, type: ActionSheetActionType, action: (() -> ())?) {
         tableViewCellArray.append(.defaultAction(title: title, type: type, action: action))
         self.contentView.tableView.reloadData()
     }
     
-    func addCustomAction(view: UIView, action: (() -> ())?) {
-        tableViewCellArray.append(.custom(view: view, action: action))
+    public func addCustomAction(view: UIView) {
+        tableViewCellArray.append(.custom(view: view))
         self.contentView.tableView.reloadData()
     }
     
-    func addDoneAction(title: String, type: ActionSheetActionType, action: (() -> ())?) {
+    public func addDoneAction(title: String, type: ActionSheetActionType, action: (() -> ())?) {
         let doneAction = {[weak self] in
             action?()
             self?.removeFromSuperview()
@@ -116,11 +119,11 @@ extension ActionSheetController: ActionSheetActions {
 
 extension ActionSheetController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         tableViewHeaderArray.isEmpty ? 1 : 2
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
             return tableViewHeaderArray.isEmpty ? tableViewCellArray.count : tableViewHeaderArray.count
@@ -131,7 +134,7 @@ extension ActionSheetController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         if section == 0 && !tableViewHeaderArray.isEmpty {
             let cellType = tableViewHeaderArray[indexPath.row]
@@ -169,7 +172,7 @@ extension ActionSheetController: UITableViewDelegate, UITableViewDataSource {
         
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
         switch section {
         case 1:
@@ -177,12 +180,10 @@ extension ActionSheetController: UITableViewDelegate, UITableViewDataSource {
             switch cellType {
             case .defaultAction(_, _, let action):
                 action?()
-            case .custom(_, let action):
-                action?()
+                removeActionSheetFromSuperView()
             default:
                 break
             }
-            removeActionSheetFromSuperView()
         default:
             break
         }

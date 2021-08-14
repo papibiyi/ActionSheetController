@@ -11,6 +11,6 @@ protocol ActionSheetActions {
     func addHeader(image: UIImage?, size: Size?, cornerRadius: CGFloat?, title: String?, message: String?)
     func addHeader(view: UIView)
     func addAction(title: String, type: ActionSheetActionType, action: (() -> ())?)
-    func addCustomAction(view: UIView, action: (() -> ())?)
+    func addCustomAction(view: UIView)
     func addDoneAction(title: String, type: ActionSheetActionType, action: (() -> ())?)
 }

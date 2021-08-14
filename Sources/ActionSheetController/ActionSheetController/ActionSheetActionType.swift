@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum ActionSheetActionType {
+public enum ActionSheetActionType {
     case normal
     case destructive
 
